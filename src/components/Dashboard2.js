@@ -1,19 +1,32 @@
 import React from "react";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 import * as cocoSsd from "@tensorflow-models/coco-ssd";
-
-import { Button } from '@material-ui/core';
+import gmatLogo from "../images/gmatLogo.png";
 import "@tensorflow/tfjs";
-import "./Dashboard2.css";
+import "./Detections.css";
+import questions from '../Questions.json';
+
 var count_facedetect = 0;
-var form_link = sessionStorage.getItem("form_link")
+var form_link = sessionStorage.getItem("form_link");
 
 export default class Dashboard2 extends React.Component {
-  videoRef = React.createRef();
-  canvasRef = React.createRef();
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      timeLeft: 30 * 60,
+      currentQuestionIndex: 0,
+      answeredQuestions: Array(questions.questions.length).fill(false),
+      visitedQuestions: Array(questions.questions.length).fill(false),
+      selectedOptions: Array(questions.questions.length).fill(null)
+    };
+    this.videoRef = React.createRef();
+    this.canvasRef = React.createRef();
+    this.timer = null;
+    
+  }
 
   componentDidMount() {
-
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       const webCamPromise = navigator.mediaDevices
         .getUserMedia({
@@ -24,30 +37,84 @@ export default class Dashboard2 extends React.Component {
             height: 300
           }
         })
-        .then(stream => {
+        .then((stream) => {
           window.stream = stream;
           this.videoRef.current.srcObject = stream;
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.videoRef.current.onloadedmetadata = () => {
               resolve();
             };
           });
         });
+
       const modelPromise = cocoSsd.load();
+
       Promise.all([modelPromise, webCamPromise])
-        .then(values => {
+        .then((values) => {
           this.detectFrame(this.videoRef.current, values[0]);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
         });
     }
+
+    this.timer = setInterval(() => {
+      this.setState((prevState) => ({
+        timeLeft: prevState.timeLeft > 0 ? prevState.timeLeft - 1 : 0
+      }));
+    }, 1000);
   }
 
-  detectFrame = (video, model) => {
-    model.detect(video).then(predictions => {
-      if (this.canvasRef.current) {
+  componentWillUnmount() {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+  }
 
+  formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  }
+
+  handleQuestionClick(questionNumber) {
+    this.setState({ currentQuestionIndex: questionNumber - 1 });
+  }
+
+  handleOptionClick(option, optionIndex) {
+    this.setState((prevState) => {
+      const selectedOptions = [...prevState.selectedOptions];
+      const answeredQuestions = [...prevState.answeredQuestions];
+      selectedOptions[prevState.currentQuestionIndex] = optionIndex;
+      answeredQuestions[prevState.currentQuestionIndex] = true;
+      return { selectedOptions, answeredQuestions };
+    });
+  }
+
+  handleNextClick = () => {
+    this.setState((prevState) => {
+      const visitedQuestions = [...prevState.visitedQuestions];
+      visitedQuestions[prevState.currentQuestionIndex] = true;
+      return {
+        currentQuestionIndex:
+          prevState.currentQuestionIndex < questions.questions.length - 1
+            ? prevState.currentQuestionIndex + 1
+            : questions.questions.length - 1,
+        visitedQuestions
+      };
+    });
+  };
+
+  handlePreviousClick = () => {
+    this.setState((prevState) => ({
+      currentQuestionIndex:
+        prevState.currentQuestionIndex > 0 ? prevState.currentQuestionIndex - 1 : 0
+    }));
+  };
+
+  detectFrame = (video, model) => {
+    model.detect(video).then((predictions) => {
+      if (this.canvasRef.current) {
         this.renderPredictions(predictions);
         requestAnimationFrame(() => {
           this.detectFrame(video, model);
@@ -58,34 +125,30 @@ export default class Dashboard2 extends React.Component {
     });
   };
 
-  renderPredictions = predictions => {
-    //var count=100;
+  renderPredictions = (predictions) => {
     const ctx = this.canvasRef.current.getContext("2d");
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    // Font options.
     const font = "16px sans-serif";
     ctx.font = font;
     ctx.textBaseline = "top";
 
-    predictions.forEach(prediction => {
-
+    predictions.forEach((prediction) => {
       const x = prediction.bbox[0];
       const y = prediction.bbox[1];
       const width = prediction.bbox[2];
       const height = prediction.bbox[3];
-      // Draw the bounding box.
       ctx.strokeStyle = "#00FFFF";
       ctx.lineWidth = 2;
       ctx.strokeRect(x, y, width, height);
-      // Draw the label background.
       ctx.fillStyle = "#00FFFF";
       const textWidth = ctx.measureText(prediction.class).width;
-      const textHeight = parseInt(font, 10); // base 10
+      const textHeight = parseInt(font, 10);
       ctx.fillRect(x, y, textWidth + 8, textHeight + 8);
-      var multiple_face = 0
+
+      var multiple_face = 0;
       for (let i = 0; i < predictions.length; i++) {
-        if (prediction.class == "person") {
-          multiple_face = multiple_face + 1
+        if (prediction.class === "person") {
+          multiple_face = multiple_face + 1;
           if (multiple_face >= 2) {
             swal("Multiple Face Detection", "Action has been Recorded", "error");
           }
@@ -94,16 +157,13 @@ export default class Dashboard2 extends React.Component {
         if (predictions[i].class === "cell phone") {
           swal("Cell Phone Detected", "Action has been Recorded", "error");
           count_facedetect = count_facedetect + 1;
-        }
-        else if (predictions[i].class === "book") {
+        } else if (predictions[i].class === "book") {
           swal("Object Detected", "Action has been Recorded", "error");
           count_facedetect = count_facedetect + 1;
-        }
-        else if (predictions[i].class === "laptop") {
+        } else if (predictions[i].class === "laptop") {
           swal("Object Detected", "Action has been Recorded", "error");
           count_facedetect = count_facedetect + 1;
-        }
-        else if (predictions[i].class !== "person") {
+        } else if (predictions[i].class !== "person") {
           swal("Face Not Visible", "Action has been Recorded", "error");
           count_facedetect = count_facedetect + 1;
         }
@@ -111,140 +171,124 @@ export default class Dashboard2 extends React.Component {
       console.log(count_facedetect);
     });
 
-    predictions.forEach(prediction => {
+    predictions.forEach((prediction) => {
       const x = prediction.bbox[0];
       const y = prediction.bbox[1];
-      console.log(predictions)
-      // Draw the text last to ensure it's on top.
       ctx.fillStyle = "#000000";
-      console.log(prediction.class);
-
-      if (prediction.class == "person" || prediction.class == "cell phone" || prediction.class == "book" || prediction.class == "laptop") {
+      if (
+        prediction.class === "person" ||
+        prediction.class === "cell phone" ||
+        prediction.class === "book" ||
+        prediction.class === "laptop"
+      ) {
         ctx.fillText(prediction.class, x, y);
       }
     });
-    console.log("final")
-    console.log(count_facedetect)
     sessionStorage.setItem("count_facedetect", count_facedetect);
-
   };
-
+  handleSubmitClick = () => {
+    this.props.history.push("/results");
+  };
   render() {
+    const questionNumbers = Array.from({ length: questions.questions.length }, (_, i) => i + 1);
+    const { currentQuestionIndex, answeredQuestions, visitedQuestions, selectedOptions } = this.state;
+    const currentQuestion = questions.questions[currentQuestionIndex];
+
     return (
-      <div className="App-header" id="Dash">
-        <header>
-
-          <video
-          id="mlVideo"
-            className="size"
-            autoPlay
-            playsInline
-            muted
-            ref={this.videoRef}
-            width="500"
-            height="300"
-          />
-          <canvas
-          id="mlCanvas"
-            className="size"
-            ref={this.canvasRef}
-            width="500"
-            height="300"
-          />
-
-          <div className="timer">
-            <div class="row">
-            
-
-              {/* <div class="column">
-              <CountdownCircleTimer
-                {...timerProps}
-                colors={[["#EF798A"]]}
-                duration={hourseconds}
-                initialRemainingTime={remainingTime % hourseconds}
-                onComplete={(totalElapsedTime) => [
-                  remainingTime - totalElapsedTime > minuteSeconds
-                ]}
-              >
-                {({ elapsedTime }) =>
-                  renderTime("minutes", getTimeMinutes(hourseconds - elapsedTime))
-                }
-              </CountdownCircleTimer>
-            </div> */}
-
-              {/* <div class="column">
-              <CountdownCircleTimer
-                {...timerProps}
-                colors={[["#218380"]]}
-                duration={minuteSeconds}
-                initialRemainingTime={remainingTime % minuteSeconds}
-                onComplete={(totalElapsedTime) => [
-                  remainingTime - totalElapsedTime > 0
-                ]}
-              >
-                {/* {({ elapsedTime }) =>
-                  renderTime("seconds", getTimeSeconds(elapsedTime))
-                } */}
-              {/* </CountdownCircleTimer>
-            </div> */}
-            
-
+      <div className="mainDiv">
+        <div className="headline">
+          <h5>Mock Test 1</h5>
+          <div className="testLogo">
+            <img src={gmatLogo} style={{ width: "100px" }} alt="GMAT Logo"></img>
+          </div>
+        </div>
+        <div className="bottomDiv">
+          <div className="mainQuestionDiv">
+            <div className="questionleft">
+              <div className="questionTab">
+                <div className="questionNo">
+                  <h5>Question No. {currentQuestion.questionNumber}</h5>
+                </div>
+                <div className="question">
+                  <div className="questionMain">
+                    {currentQuestion.question}
+                  </div>
+                  <div className="questionOptions">
+                    <div className="option-container">
+                      {currentQuestion.options.map((option, index) => (
+                        <div
+                          key={index}
+                          className="option"
+                          onClick={() => this.handleOptionClick(option, index)}
+                          style={{
+                            backgroundColor: selectedOptions[currentQuestionIndex] === index ? "#AFE1AF" : "#f0f0f0"
+                          }}
+                        >
+                          {index + 1}. {option}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="submitButtons">
+                <button className="buttons" onClick={this.handlePreviousClick}>Previous</button>
+                <button className="buttons" onClick={this.handleNextClick}>Next</button>
+                <button className="buttons" onClick={this.handleSubmitClick}>Submit</button>
+              </div>
             </div>
           </div>
-
-
-          {/* <div className="text">
-            <p>Remaining Time!!</p>
+          <div className="tabsRight">
+            <div className="timeLeft">
+              {this.state.timeLeft !== 0 && (
+                <div className="progress-bar" style={{ width: `${(this.state.timeLeft / (30 * 60)) * 100}%` }}></div>
+              )}
+              <p>Time Left: {this.formatTime(this.state.timeLeft)}</p>
+            </div>
+            <div className="videoTab">
+              {/* <video
+                className="size"
+                autoPlay
+                playsInline
+                muted
+                ref={this.videoRef}
+                width="500"
+                height="300"
+              />
+              <canvas
+                className="size"
+                ref={this.canvasRef}
+                width="500"
+                height="300"
+              /> */}
+            </div>
+            <div className="questionPalette">
+              {questionNumbers.map((number) => (
+                <div
+                  key={number}
+                  className="questionNumber"
+                  style={{
+                    backgroundColor: answeredQuestions[number - 1]
+                      ? "#AFE1AF"
+                      : visitedQuestions[number - 1]
+                        ? "#CBC3E3"
+                        : "#f0f0f0" // default color for unvisited questions
+                  }}
+                  onClick={() => this.handleQuestionClick(number)}
+                >
+                  {number}
+                </div>
+              ))}
+            </div>
+            <div className="indicator-container">
+                <div className="indicator" style={{backgroundColor:"#CBC3E3"}}></div>
+                <h6 className="indicator-label">Visited</h6>
+                <div className="indicator" style={{backgroundColor:"#AFE1AF"}}></div>
+                <h6 className="indicator-label">Answered</h6>
+              </div>
           </div>
-
-          <div className="button">
-            <p>Submit here!!</p>
-            <center><Button variant="contained" onClick={console.log("yes")}>Submit</Button></center>
-          </div> */}
-
-          <div className="right-half">
-            <div className="timer">
-              {/* Timer component */}
-            </div>
-
-            <div className="text">
-              <p>Remaining Time!!</p>
-            </div>
-
-            <div className="button">
-              <p>Submit here!!</p>
-              <center><Button variant="contained" onClick={console.log("yes")}>Submit</Button></center>
-            </div>
-
-            {/* Static test questions */}
-            
-          </div>
-
-
-        </header>
-
+        </div>
       </div>
-
-      // <div>
-      // {/* <video
-      //   className="size"
-      //   autoPlay
-      //   playsInline
-      //   muted
-      //   ref={this.videoRef}
-      //   width="500"
-      //   height="300"
-      // />
-      // <canvas
-      //   className="size"
-      //   ref={this.canvasRef}
-      //   width="500"
-      //   height="300"
-      // /> */}
-
-      // {/* <iframe className="qsection" src={form_link} id='form' width="850" height="100vh" frameBorder="0" marginheight="0" marginwidth="0">Loading…</iframe > */}
-
-      // {/* </div> */}
     );
   }
 }

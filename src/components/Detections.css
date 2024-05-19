@@ -1,7 +1,12 @@
+.mainDiv{
+  height: 720px;
+  width: 100vw;
+}
 .size{
     position: absolute;
     top: 0;
     left: 0;
+
   }
   .timer{
     position: fixed;
@@ -18,7 +23,27 @@
     padding: 10px;
    
   }
+.mainQuestionDiv{
+width: 63%;  
+display: flex;
+border-right: 1px solid black;
+flex-direction: column;
 
+}
+.questionleft{
+  width: 95%;
+  padding: 20px;
+  height: 90.5vh;
+}
+.questionTab{
+  padding: 20px;
+  border:1px solid black;
+
+}
+.questionNo{
+  display: flex;
+  justify-content: left;
+}
  
   .quest {
     position:absolute;
@@ -33,11 +58,6 @@
     width: 100px;
   }
 
-  .button{
-    position:absolute;
-    top: 80%;
-    left: 10%;
-  }
   
   .text{
     position:absolute;
@@ -50,3 +70,159 @@
     top: 60%;
     left: 5%;
   }
+
+  .option-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .option {
+    background-color: #f0f0f0; /* Light background color */
+    padding: 10px;
+    margin: 5px 0; /* Space between options */
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    border-radius: 10px;
+  }
+  
+  .option:hover {
+    background-color: #e0e0e0; /* Slightly darker background on hover */
+  }
+.tabsRight{
+  height: 720px;
+  width: 37%;
+  padding: 15px;
+
+}
+  .videoTab{
+    border: 2px solid black;
+    width: 503px;
+    height: 303px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+    padding: 10%;
+  }
+
+  .headline{
+    display: flex;
+    align-content: center;
+    align-items: center;
+    border-bottom: 1px solid black;
+    font-family: 'poppins';
+    padding: 15px;
+    justify-content: space-between;
+  }
+ .bottomDiv{
+  display: flex;
+ }
+
+ .questionPalette {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 columns */
+  gap: 10px;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.questionNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px; /* Set a fixed width */
+  height: 50px; /* Set a fixed height */
+  background-color: #f0f0f0; /* Light background color */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.questionNumber:hover {
+  background-color: #d0d0d0; /* Slightly darker on hover */
+}
+
+.questionNumber:active {
+  background-color: #b0b0b0; /* Darker when active */
+}
+
+.questionNumber.selected {
+  background-color: #00aaff; /* Different color for the selected question */
+  color: #fff;
+}
+.timeLeft {
+  position: relative;
+  background-color: #f8f9fa; /* Light background color */
+  color: #343a40; /* Dark text color for good contrast */
+  border: 2px solid #6c757d; /* Border color */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px 20px; /* Padding for spacing */
+  font-size: 1.5rem; /* Larger font size for better readability */
+  font-weight: bold; /* Bold text */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  margin: 10px 0; /* Margin for spacing around the element */
+  overflow: hidden; /* Ensures content stays within the rounded border */
+  height: 45px;
+}
+
+.timeLeft h2 {
+  position: relative;
+  z-index: 2; /* Keeps the text above the progress bar */
+  margin: 0; /* Remove default margin from h2 */
+  justify-content: center;
+  display: flex;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 10%;
+  background-color: #28a745; /* Green color for the progress bar */
+  z-index: 1; /* Places the progress bar behind the text */
+  transition: width 1s linear; /* Smooth transition effect */
+}
+.submitButtons {
+  display: flex; /* Display buttons in a row */
+  justify-content: space-between; /* Distribute space between buttons */
+  height: fit-content;
+  padding: 10px;
+  width: 50%;
+}
+
+.buttons {
+  padding: 10px; /* Add padding for better appearance */
+  font-size: 16px; /* Set font size */
+  background-color: #007bff; /* Set button background color */
+  color: #fff; /* Set text color */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add border radius for rounded corners */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  transition: background-color 0.3s ease; /* Add transition effect for background color change */
+  width: 125px;
+}
+
+.button:hover {
+  background-color: #0056b3; /* Change background color on hover */
+}
+.indicator-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.indicator {
+  height: 12.5px;
+  width: 12.5px;
+  border-radius: 50%;
+  margin: 0 5px;
+}
+
+.indicator-label {
+  margin: 0 10px;
+}

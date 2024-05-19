@@ -1,0 +1,154 @@
+{
+    "questions": [
+      {
+        "questionNumber": 1,
+        "question": "What is the capital of India?",
+        "options": ["Paris", "London", "New Delhi", "Berlin"],
+        "correctAnswer": "Paris"
+      },
+      {
+        "questionNumber": 2,
+        "question": "Who painted the Mona Lisa?",
+        "options": ["Leonardo da Vinci", "Vincent van Gogh", "Pablo Picasso", "Michelangelo"],
+        "correctAnswer": "Leonardo da Vinci"
+      },
+      {
+        "questionNumber": 3,
+        "question": "Which planet is known as the Red Planet?",
+        "options": ["Mars", "Venus", "Jupiter", "Mercury"],
+        "correctAnswer": "Mars"
+      },
+      {
+        "questionNumber": 4,
+        "question": "What is the chemical symbol for water?",
+        "options": ["H2O", "CO2", "O2", "NaCl"],
+        "correctAnswer": "H2O"
+      },
+      {
+        "questionNumber": 5,
+        "question": "Who wrote 'To Kill a Mockingbird'?",
+        "options": ["Harper Lee", "J.K. Rowling", "Stephen King", "Mark Twain"],
+        "correctAnswer": "Harper Lee"
+      },
+      {
+        "questionNumber": 6,
+        "question": "What is the largest mammal?",
+        "options": ["Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
+        "correctAnswer": "Blue Whale"
+      },
+      {
+        "questionNumber": 7,
+        "question": "Which country is known as the Land of the Rising Sun?",
+        "options": ["China", "Japan", "India", "South Korea"],
+        "correctAnswer": "Japan"
+      },
+      {
+        "questionNumber": 8,
+        "question": "What is the largest organ in the human body?",
+        "options": ["Liver", "Skin", "Heart", "Brain"],
+        "correctAnswer": "Skin"
+      },
+      {
+        "questionNumber": 9,
+        "question": "Who discovered penicillin?",
+        "options": ["Alexander Fleming", "Marie Curie", "Albert Einstein", "Isaac Newton"],
+        "correctAnswer": "Alexander Fleming"
+      },
+      {
+        "questionNumber": 10,
+        "question": "What is the chemical symbol for gold?",
+        "options": ["Au", "Ag", "Fe", "Cu"],
+        "correctAnswer": "Au"
+      },
+      {
+        "questionNumber": 11,
+        "question": "What is the world's largest ocean?",
+        "options": ["Atlantic Ocean", "Arctic Ocean", "Indian Ocean", "Pacific Ocean"],
+        "correctAnswer": "Pacific Ocean"
+      },
+      {
+        "questionNumber": 12,
+        "question": "Which bird is known as the symbol of peace?",
+        "options": ["Eagle", "Dove", "Parrot", "Swan"],
+        "correctAnswer": "Dove"
+      },
+      {
+        "questionNumber": 13,
+        "question": "Who developed the theory of relativity?",
+        "options": ["Isaac Newton", "Galileo Galilei", "Albert Einstein", "Stephen Hawking"],
+        "correctAnswer": "Albert Einstein"
+      },
+      {
+        "questionNumber": 14,
+        "question": "Which gas is most abundant in the Earth's atmosphere?",
+        "options": ["Nitrogen", "Oxygen", "Carbon Dioxide", "Argon"],
+        "correctAnswer": "Nitrogen"
+      },
+      {
+        "questionNumber": 15,
+        "question": "Who was the first man to walk on the moon?",
+        "options": ["Buzz Aldrin", "Neil Armstrong", "Yuri Gagarin", "Michael Collins"],
+        "correctAnswer": "Neil Armstrong"
+      },
+      {
+        "questionNumber": 16,
+        "question": "What is the largest planet in our solar system?",
+        "options": ["Jupiter", "Saturn", "Neptune", "Uranus"],
+        "correctAnswer": "Jupiter"
+      },
+      {
+        "questionNumber": 17,
+        "question": "Which instrument is used to measure atmospheric pressure?",
+        "options": ["Thermometer", "Barometer", "Hygrometer", "Anemometer"],
+        "correctAnswer": "Barometer"
+      },
+      {
+        "questionNumber": 18,
+        "question": "Who painted 'The Starry Night'?",
+        "options": ["Vincent van Gogh", "Pablo Picasso", "Claude Monet", "Leonardo da Vinci"],
+        "correctAnswer": "Vincent van Gogh"
+      },
+      {
+        "questionNumber": 19,
+        "question": "Which gas is known as laughing gas?",
+        "options": ["Nitrous Oxide", "Oxygen", "Carbon Dioxide", "Hydrogen"],
+        "correctAnswer": "Nitrous Oxide"
+      },
+      {
+        "questionNumber": 20,
+        "question": "What is the chemical symbol for silver?",
+        "options": ["Ag", "Au", "Fe", "Hg"],
+        "correctAnswer": "Ag"
+      },
+      {
+        "questionNumber": 21,
+        "question": "Who wrote 'Romeo and Juliet'?",
+        "options": ["William Shakespeare", "Charles Dickens", "Jane Austen", "Mark Twain"],
+        "correctAnswer": "William Shakespeare"
+      },
+      {
+        "questionNumber": 22,
+        "question": "Which is the smallest bone in the human body?",
+        "options": ["Stapes", "Femur", "Tibia", "Radius"],
+        "correctAnswer": "Stapes"
+      },
+      {
+        "questionNumber": 23,
+        "question": "What is the chemical symbol for iron?",
+        "options": ["Fe", "Au", "Ag", "Cu"],
+        "correctAnswer": "Fe"
+      },
+      {
+        "questionNumber": 24,
+        "question": "Who is known as the Father of Computers?",
+        "options": ["Charles Babbage", "Alan Turing", "Ada Lovelace", "Bill Gates"],
+        "correctAnswer": "Charles Babbage"
+      },
+      {
+        "questionNumber": 25,
+  "question": "Which country is known as the 'Land of the Thunder Dragon'?",
+  "options": ["Nepal", "Bhutan", "Tibet", "Mongolia"],
+  "correctAnswer": "Bhutan"
+}
+    ]
+}
