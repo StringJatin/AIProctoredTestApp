@@ -28,6 +28,7 @@ import Dashboard2 from './components/Dashboard2'
 import AdminSignIn from './components/AdminSignIn'
 import PosenetPage from './components/Posenet';
 import CodeCheck from './components/CodeCheck'
+import Result from './components/Result';
 class App extends Component {
   render() {
     return (
@@ -52,9 +53,7 @@ class App extends Component {
           <Route exact path="/adminsignin" component={AdminSignIn} />
           <Route exact path="/posenet" component={PosenetPage} />
           <Route exact path="/codecheck" component={CodeCheck} />
-        
-
-
+          <Route exact path="/resultPage" component={Result}/>
           <Route exact path="/404" component={PageNotFound} />
           <Redirect to="/404" />
         </Switch>

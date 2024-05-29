@@ -26,9 +26,11 @@
     "react-countdown-circle-timer": "^2.5.1",
     "react-dom": "^16.13.1",
     "react-google-login": "^5.2.2",
+    "react-image-lightbox": "^5.1.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.1",
     "react-webcam": "^5.2.1",
+    "recharts": "^2.12.7",
     "sweetalert": "^2.1.2"
   },
   "scripts": {

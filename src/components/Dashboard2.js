@@ -18,7 +18,8 @@ export default class Dashboard2 extends React.Component {
       currentQuestionIndex: 0,
       answeredQuestions: Array(questions.questions.length).fill(false),
       visitedQuestions: Array(questions.questions.length).fill(false),
-      selectedOptions: Array(questions.questions.length).fill(null)
+      selectedOptions: Array(questions.questions.length).fill(null),
+      cheatingInstances: []
     };
     this.videoRef = React.createRef();
     this.canvasRef = React.createRef();
@@ -125,13 +126,77 @@ export default class Dashboard2 extends React.Component {
     });
   };
 
+  // renderPredictions = (predictions) => {
+  //   const ctx = this.canvasRef.current.getContext("2d");
+  //   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  //   const font = "16px sans-serif";
+  //   ctx.font = font;
+  //   ctx.textBaseline = "top";
+
+  //   predictions.forEach((prediction) => {
+  //     const x = prediction.bbox[0];
+  //     const y = prediction.bbox[1];
+  //     const width = prediction.bbox[2];
+  //     const height = prediction.bbox[3];
+  //     ctx.strokeStyle = "#00FFFF";
+  //     ctx.lineWidth = 2;
+  //     ctx.strokeRect(x, y, width, height);
+  //     ctx.fillStyle = "#00FFFF";
+  //     const textWidth = ctx.measureText(prediction.class).width;
+  //     const textHeight = parseInt(font, 10);
+  //     ctx.fillRect(x, y, textWidth + 8, textHeight + 8);
+
+  //     var multiple_face = 0;
+  //     for (let i = 0; i < predictions.length; i++) {
+  //       if (prediction.class === "person") {
+  //         multiple_face = multiple_face + 1;
+  //         if (multiple_face >= 2) {
+  //           swal("Multiple Face Detection", "Action has been Recorded", "error");
+  //         }
+  //       }
+
+  //       if (predictions[i].class === "cell phone") {
+  //         swal("Cell Phone Detected", "Action has been Recorded", "error");
+  //         count_facedetect = count_facedetect + 1;
+  //       } else if (predictions[i].class === "book") {
+  //         swal("Object Detected", "Action has been Recorded", "error");
+  //         count_facedetect = count_facedetect + 1;
+  //       } else if (predictions[i].class === "laptop") {
+  //         swal("Object Detected", "Action has been Recorded", "error");
+  //         count_facedetect = count_facedetect + 1;
+  //       } else if (predictions[i].class !== "person") {
+  //         swal("Face Not Visible", "Action has been Recorded", "error");
+  //         count_facedetect = count_facedetect + 1;
+  //       }
+  //     }
+  //     console.log(count_facedetect);
+  //   });
+
+  //   predictions.forEach((prediction) => {
+  //     const x = prediction.bbox[0];
+  //     const y = prediction.bbox[1];
+  //     ctx.fillStyle = "#000000";
+  //     if (
+  //       prediction.class === "person" ||
+  //       prediction.class === "cell phone" ||
+  //       prediction.class === "book" ||
+  //       prediction.class === "laptop"
+  //     ) {
+  //       ctx.fillText(prediction.class, x, y);
+  //     }
+  //   });
+  //   sessionStorage.setItem("count_facedetect", count_facedetect);
+  // };
+
+
+  // with cheating instances
   renderPredictions = (predictions) => {
     const ctx = this.canvasRef.current.getContext("2d");
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     const font = "16px sans-serif";
     ctx.font = font;
     ctx.textBaseline = "top";
-
+  
     predictions.forEach((prediction) => {
       const x = prediction.bbox[0];
       const y = prediction.bbox[1];
@@ -144,33 +209,38 @@ export default class Dashboard2 extends React.Component {
       const textWidth = ctx.measureText(prediction.class).width;
       const textHeight = parseInt(font, 10);
       ctx.fillRect(x, y, textWidth + 8, textHeight + 8);
-
-      var multiple_face = 0;
+  
+      let multiple_face = 0;
       for (let i = 0; i < predictions.length; i++) {
         if (prediction.class === "person") {
-          multiple_face = multiple_face + 1;
+          multiple_face += 1;
           if (multiple_face >= 2) {
             swal("Multiple Face Detection", "Action has been Recorded", "error");
+            this.recordCheatingInstance("Multiple Faces Detected", "src/CheatingInstances/image1.png");
           }
         }
-
+  
         if (predictions[i].class === "cell phone") {
           swal("Cell Phone Detected", "Action has been Recorded", "error");
-          count_facedetect = count_facedetect + 1;
+          count_facedetect += 1;
+          this.recordCheatingInstance("Cell Phone Detected", "src/CheatingInstances/image1.png");
         } else if (predictions[i].class === "book") {
           swal("Object Detected", "Action has been Recorded", "error");
-          count_facedetect = count_facedetect + 1;
+          count_facedetect += 1;
+          this.recordCheatingInstance("Book Detected", "src/CheatingInstances/image1.png");
         } else if (predictions[i].class === "laptop") {
           swal("Object Detected", "Action has been Recorded", "error");
-          count_facedetect = count_facedetect + 1;
+          count_facedetect += 1;
+          this.recordCheatingInstance("Laptop Detected", "src/CheatingInstances/image1.png");
         } else if (predictions[i].class !== "person") {
           swal("Face Not Visible", "Action has been Recorded", "error");
-          count_facedetect = count_facedetect + 1;
+          count_facedetect += 1;
+          this.recordCheatingInstance("Face Not Visible", "src/CheatingInstances/image1.png");
         }
       }
       console.log(count_facedetect);
     });
-
+  
     predictions.forEach((prediction) => {
       const x = prediction.bbox[0];
       const y = prediction.bbox[1];
@@ -186,8 +256,19 @@ export default class Dashboard2 extends React.Component {
     });
     sessionStorage.setItem("count_facedetect", count_facedetect);
   };
+  
+  recordCheatingInstance = (description, image) => {
+    this.setState((prevState) => {
+      const cheatingInstances = [...prevState.cheatingInstances, { description, image }];
+      sessionStorage.setItem("cheatingInstances", JSON.stringify(cheatingInstances));
+      return { cheatingInstances };
+    });
+  };
+
   handleSubmitClick = () => {
-    this.props.history.push("/results");
+    const { selectedOptions } = this.state;
+    sessionStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
+    this.props.history.push("/resultPage");
   };
   render() {
     const questionNumbers = Array.from({ length: questions.questions.length }, (_, i) => i + 1);
@@ -246,7 +327,7 @@ export default class Dashboard2 extends React.Component {
               <p>Time Left: {this.formatTime(this.state.timeLeft)}</p>
             </div>
             <div className="videoTab">
-              {/* <video
+              <video
                 className="size"
                 autoPlay
                 playsInline
@@ -260,7 +341,7 @@ export default class Dashboard2 extends React.Component {
                 ref={this.canvasRef}
                 width="500"
                 height="300"
-              /> */}
+              />
             </div>
             <div className="questionPalette">
               {questionNumbers.map((number) => (
